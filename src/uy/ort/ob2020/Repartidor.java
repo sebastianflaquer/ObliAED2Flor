@@ -1,7 +1,7 @@
 package uy.ort.ob2020;
 
 public class Repartidor implements Comparable<Repartidor>{
-	private int id;
+    private int id;
     private String CI;
     private String Nombre;
     private String email;

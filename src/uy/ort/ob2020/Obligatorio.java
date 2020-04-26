@@ -1,6 +1,5 @@
 package uy.ort.ob2020;
 
-
 public class Obligatorio {
 	
 	public static void main(String[] args) {

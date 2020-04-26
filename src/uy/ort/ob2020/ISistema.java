@@ -25,6 +25,4 @@ public interface ISistema {
 
 	Retorno dibujarMapa();
 	
-	
-	
 }
