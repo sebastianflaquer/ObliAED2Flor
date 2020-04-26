@@ -15,15 +15,14 @@ public class Obligatorio {
         
     }
 	
-	//PRUEBA 1
+    //PRUEBA 1
     static void prueba1(Sistema s, Prueba p){
         
         //REGISTRAR AFILIADO
-        p.ver(s.registrarRepartidor(1, "4.517.456-4", "Sebastian Flaquer", "s@gmail.com").resultado, Retorno.Resultado.OK, "Se agrego Repartidor");
-        p.ver(s.registrarRepartidor(2, "3.567.932-3", "Roberto Rodriguez", "r@gmail.com").resultado, Retorno.Resultado.OK, "Se agrego Repartidor");
-        p.ver(s.registrarRepartidor(3, "2.987.134-2", "Martin Perez", "m@gmail.com").resultado, Retorno.Resultado.OK, "Se agrego Repartidor");
-        p.ver(s.registrarRepartidor(4, "1.245.567-1", "Pedro Gonzales", "p@gmail.com").resultado, Retorno.Resultado.OK, "Se agrego Repartidor");
-        
+        p.ver(s.registrarRepartidor("Sebastian", "OAA1234").resultado, Retorno.Resultado.OK, "Se agrego Repartidor");
+        p.ver(s.registrarRepartidor("Agustin", "OAA1234").resultado, Retorno.Resultado.OK, "Se agrego Repartidor");
+        p.ver(s.registrarRepartidor("Juan", "OAA1234").resultado, Retorno.Resultado.OK, "Se agrego Repartidor");
+        p.ver(s.registrarRepartidor("Pedro", "OAA1234").resultado, Retorno.Resultado.OK, "Se agrego Repartidor");
         //p.imprimirResultadosPrueba();
     }
     
@@ -42,7 +41,7 @@ public class Obligatorio {
 //        p.ver(s.registrarCiudad("Montevideo").resultado, Retorno.Resultado.ERROR_1, "Montevideo ya existe");
 //
 //        p.imprimirComentario("INTENTAMOS SOBREPASAR EL LIMITE DE CIUDADES");
-//        p.ver(s.registrarCiudad("Buenos Aires").resultado, Retorno.Resultado.ERROR_2, "Se sobrepasa el límite de ciudades gestionados por el sistema");
+//        p.ver(s.registrarCiudad("Buenos Aires").resultado, Retorno.Resultado.ERROR_2, "Se sobrepasa el lï¿½mite de ciudades gestionados por el sistema");
 //
 //        p.imprimirResultadosPrueba();   
     }

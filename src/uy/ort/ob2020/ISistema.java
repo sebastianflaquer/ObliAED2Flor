@@ -7,10 +7,10 @@ public interface ISistema {
 	
 	Retorno destruirSistema();
 	
-	Retorno registrarRepartidor(int id, String cedula, String nombre, String email);
-	
-	Retorno buscarRepartidor(String Ci);
-	
+        Retorno registrarRepartidor(String matricula, String nombre);
+        
+        Retorno buscarRepartidor(String matricula);
+        
 	Retorno listarRepartidores();
 	
 	Retorno registrarCentro(String nombre, Double coordX, Double coordY, EnumCriticidad criticidad);

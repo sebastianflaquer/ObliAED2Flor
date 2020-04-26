@@ -31,10 +31,9 @@ public class Sistema implements ISistema{
         this.setMaxPuntos(0);
         return new Retorno(Retorno.Resultado.OK);
     }
-
+       
     @Override
-    public Retorno registrarRepartidor(int id, String cedula, String nombre, String email) {
-        
+    public Retorno registrarRepartidor(String matricula, String nombre) {
         return new Retorno(Retorno.Resultado.OK);
     }
 
@@ -85,6 +84,12 @@ public class Sistema implements ISistema{
         // TODO Auto-generated method stub
         return new Retorno(Retorno.Resultado.OK);
     }	
+
+    Object registrarRepartidor(int i, String sebastian_Flaquer, String sgmailcom) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
 	
 	
 }

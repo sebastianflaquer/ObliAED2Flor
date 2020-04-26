@@ -1,32 +1,23 @@
 package uy.ort.ob2020;
 
 public class Repartidor implements Comparable<Repartidor>{
-    private int id;
-    private String CI;
+    private String Matricula;
     private String Nombre;
-    private String email;
 
     //CONSTRUCTOR
-    public Repartidor(int id, String CI, String Nombre) {
-        this.id = id;
-        this.CI = CI;
+    public Repartidor(String Matricula, String Nombre) {
+        this.Matricula = Matricula;
         this.Nombre = Nombre;
     }
 
     //GETTER AND SETTER
-    public int getId() {
-        return id;
+    
+    public String getMatricula() {
+        return Matricula;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-    public String getCI() {
-        return CI;
-    }
-
-    public void setCI(String CI) {
-        this.CI = CI;
+    public void setMatricula(String Matricula) {
+        this.Matricula = Matricula;
     }
 
     public String getNombre() {
@@ -37,17 +28,9 @@ public class Repartidor implements Comparable<Repartidor>{
         this.Nombre = Nombre;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     @Override
     public int compareTo(Repartidor t) {
-        int ret = (int) Math.signum(this.CI.compareTo(t.CI));
+        int ret = (int) Math.signum(this.Matricula.compareTo(t.Matricula));
         return ret;
     }
 }
