@@ -13,13 +13,13 @@ public interface ISistema {
         
 	Retorno listarRepartidores();
 	
-	Retorno registrarCentro(String nombre, Double coordX, Double coordY, EnumCriticidad criticidad);
+	Retorno registrarCentro(String nombre, double coordX, double coordY, EnumCriticidad criticidad);
 	
-	Retorno registrarEsquina(Double coordX, Double coordY);
+	Retorno registrarEsquina(double coordX, double coordY);
 	
-	Retorno registrarTramo(Double coordXi, Double coordYi, Double coordXf, Double coordYf, int metros);
+	Retorno registrarTramo(double coordXi, double coordYi, double coordXf, double coordYf, int metros);
 	
-	Retorno centroCriticoMasCercano(Double coordX, Double coordY);
+	Retorno centroCriticoMasCercano(double coordX, double coordY);
 	
 	Retorno caminoSeguro();
 

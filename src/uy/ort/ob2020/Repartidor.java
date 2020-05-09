@@ -1,6 +1,7 @@
 package uy.ort.ob2020;
 
 public class Repartidor implements Comparable<Repartidor>{
+    
     private String Matricula;
     private String Nombre;
 
@@ -10,7 +11,7 @@ public class Repartidor implements Comparable<Repartidor>{
         this.Nombre = Nombre;
     }
 
-    //GETTER AND SETTER
+    //GETTER AND SETTER   
     
     public String getMatricula() {
         return Matricula;
