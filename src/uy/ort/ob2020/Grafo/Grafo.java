@@ -5,6 +5,9 @@
  */
 package uy.ort.ob2020.Grafo;
 
+import uy.ort.ob2020.CentroMedico;
+import uy.ort.ob2020.EnumCriticidad;
+
 /**
  *
  * @author User Name
@@ -15,6 +18,7 @@ public class Grafo {
     private int cantidad; //cantidad actual de nodos.
     private NodoGrafo[] vertices; //representamos los vertices (la existencia o no existencia).
     private Arista[][] matAdy; //representamos las conexiones entre los vertices).
+    private int aux;
     
     //CONSTRUCTOR
     public Grafo(int tope) {
@@ -108,6 +112,10 @@ public class Grafo {
     public boolean esLleno() {
         return cantidad == tope;
     }
+    
+    public boolean sonAdyacentes(int a, int b) {
+	return (this.matAdy[a][b].isExiste());
+    }
 
    
     //EXISTE VERTICE
@@ -188,7 +196,36 @@ public class Grafo {
         matAdy[posOrigen][posDestino].setExiste(false);
         matAdy[posDestino][posOrigen].setExiste(false);
     }
+    
+    
+    
 
+    
+
+    public NodoGrafo[] getVerticesCriticos() {
+        
+        int count = 0;
+        NodoGrafo[] verticesCriticos = new NodoGrafo[cantidad];
+        
+        for(int i = 0; i< cantidad; i++){
+            
+            NodoGrafo nodoActual = vertices[i];
+            if(nodoActual.getDato() instanceof CentroMedico){         
+                
+                CentroMedico centroActual = (CentroMedico)nodoActual.getDato();
+                if(centroActual.getCriticidad() == EnumCriticidad.ALTA){                    
+                    verticesCriticos[count] = nodoActual;
+                    count++;
+                }
+            }
+        }
+        
+        return verticesCriticos;
+    }
+    
+    /****************************************/
+    /* DFS                                  */
+    /****************************************/
     public void DFS(){
         boolean[] vis = new boolean[tope];
         int pos = posOcupada();
@@ -211,6 +248,220 @@ public class Grafo {
                 DFSRec(i, vis);
             }
         }
+    }
+    
+    
+//    /****************************************/
+//    /* CAMINO MINIMO                        */
+//    /****************************************/
+//    public int caminoMinimoGrafo(int o, int d) { //origen y destino
+//        //        
+//        boolean[] visitados = new boolean[this.cantidad + 1]; //Marcamos en verde.
+//        int[] predecesores = new int[this.cantidad +1];
+//        int[] costos = new int[this.cantidad +1];
+//        //
+//        ////INICIALIZACION
+//        visitados[o] = true;
+//        costos[o] = 0;
+//        //
+//        for (int i=1; i<=this.cantidad + 1; i++) {
+//            if (i!=o) //para todos los vertices menos para el inicial
+//                if (this.sonAdyacentes(o, i)) {
+//                    costos[i] = this.matAdy[o][i].peso;
+//                    predecesores[i] = o;
+//                }
+//                else{
+//                    costos[i] = Integer.MAX_VALUE;
+//                }
+//                        
+//        }
+//        //FIN INICIALIZACION
+//        //
+//        //LOOP
+//        for (int i=1; i<=this.cantidad + 1; i++) {
+//            //Hallar w: Vertice con la distancia mas corta y no visitado.
+//            int w = VerticeConDistanciaMasCortaNoVisitado(costos, visitados);
+//            visitados[w] = true; //Marcarlo en verde.//Etiqueta definitiva.
+//
+//            for (int j=1; j<=this.cantidad +1; j++) {
+//                //Solo nos interesan los vertices adyacentes a w y que no hayan sido visitados.
+//                if (this.sonAdyacentes(w, j) && !visitados[j]) {
+//                    //Pregunto si conviene actualizar la distancia a estos vertices.
+//                    if (costos[j] > costos[w] + this.matAdy[w][j].peso) {
+//                        //Cambio el camino porque encontre una mejor ruta
+//                        costos[j] = costos[w] + this.matAdy[w][j].peso;
+//                        predecesores[j] = w;
+//                    }
+//                }
+//            }
+//        }
+//        
+//        //FIN LOOP
+//        //imprimirCaminos(o,d,predecesores);
+//        
+//        return costos[d];
+//    }
+    
+    
+    
+    /****************************************/
+    /* DIJKSTRA                             */
+    /****************************************/
+    public int dijkstra(NodoGrafo origen, NodoGrafo destino) {
+        int posO = posVertice(origen);
+        int posD = posVertice(destino);
+
+        // Etapa 1: Inicializo vectores
+        int[] dist = new int[tope];
+        int[] ant = new int[tope];
+        boolean[] vis = new boolean[tope];
+        
+        //for (int i = 0; i < tope; ant[i] = -1,dist[i] = Integer.MAX_VALUE,i++);
+        for (int i = 0; i < tope; i++){
+            ant[i] = -1;
+            dist[i] = Integer.MAX_VALUE;
+        }
+        
+        dijkstraInterno(posO, dist, ant, vis);
+        
+        if(dist[posD] == Integer.MAX_VALUE){
+            return -1;
+        }else{
+            return dist[posD];
+        }
+    }
+
+    private void dijkstraInterno(int posO, int[] dist, int[] ant, boolean[] vis) {
+        // Etapa 2: Actualizo las distancias de los adyacentes del origen
+        dist[posO] = 0;
+        vis[posO] = true;
+
+        for (int i = 0; i < tope; i++) {
+            if(matAdy[posO][i].isExiste()) {
+                dist[i] = matAdy[posO][i].getPeso();
+                ant[i] = posO;
+            }
+        }
+
+        // Etapa 3: Proceso iterativo para actualizar distancias,
+        //    actualizando aquellas aristas que marquen un mejor camino
+
+        for (int k = 1; k < tope; k++) {
+            // Elijo al próximo vertice, siendo éste el de menor distancia no visitada
+            int posCand = -1;
+            int min = Integer.MAX_VALUE;
+            for (int i = 0; i < tope; i++) {
+                if(!vis[i] && dist[i]<min) {
+                    min = dist[i];
+                    posCand = i;
+                }
+            }
+
+            // Si no hay candidato, no es conexo.
+            if(posCand == -1){
+                return;
+            }   
+
+            vis[posCand] = true;
+
+            for (int i = 0; i < tope; i++) {
+                if(!vis[i] && matAdy[posCand][i].isExiste()){
+                    int sumaDist = dist[posCand] + matAdy[posCand][i].getPeso();
+                    if(sumaDist < dist[i]){
+                        dist[i] = sumaDist;
+                        ant[i] = posCand;						
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
+    /****************************************/
+    /* PRIM                                 */
+    /****************************************/
+    public Grafo prim(){
+		
+        Grafo ret = new Grafo(tope);
+
+        for (int i = 0; i < tope; i++) {
+            if(vertices[i] != null)
+            {
+                ret.agregarVertice(vertices[i]);
+            }
+        }
+
+        boolean[] vis = new boolean[tope];
+        // for (int i = 0; i < tope; vis[i++]=false);
+
+        vis[posOcupada()] = true;
+
+        for (int k = 0; k < cantidad-1; k++) {
+
+            int min = Integer.MAX_VALUE;
+            int posOrigen = -1;
+            int posDestino = -1;
+
+            for (int i = 0; i < tope; i++) {
+                if(vis[i]){
+                    for (int j = 0; j < tope; j++) {
+                        if(!vis[j] && matAdy[i][j].isExiste() && matAdy[i][j].getPeso()< min){                            
+                            min = matAdy[i][j].getPeso();
+                            posOrigen = i;
+                            posDestino = j;                            
+                        }
+                    }
+                }
+            }
+            
+            ret.agregarArista(vertices[posOrigen], vertices[posDestino], min);
+            vis[posDestino] = true;
+            
+        }
+        
+        return ret;
+    }
+
+    //CALCULA LA SUMA DE TODAS LAS ARISTAS - HAY QUE TENER EN CUENTA QUE TODOS LOS CAMINOS SON DE DOBLE SENTIDO
+    public int TotalDistancias() {
+        
+        int distanciaTotal = 0;
+        
+        for(int i = 0; i <  cantidad; i++){
+            for(int j = 0; j < tope; j++){
+                if(matAdy[i][j].isExiste()){
+                    
+                    distanciaTotal = distanciaTotal + matAdy[i][j].getPeso();
+                }
+            }
+        }
+        return distanciaTotal/2;
+    }
+
+    //GENERA UN STRING CON LOS VERTICES - coordx1;coordy1-coordx2;coordy2|coordx1;coordy1-coordx3;coordy3|coordx2;coordy2-coordx4;coordy4
+    public String CaminoString() {
+        
+        String retorno = "";
+        
+        for(int i = 0; i <  cantidad; i++){
+            for(int j = 0; j < tope; j++){
+                if(matAdy[i][j].isExiste()){
+                    
+                    retorno = retorno + vertices[i].getCoordX() + ";" + vertices[i].getCoordY();
+                    retorno = retorno + "-";
+                    retorno = retorno + vertices[j].getCoordX() + ";" + vertices[j].getCoordY();
+                    retorno = retorno + "|";
+                    
+                    //lo marca como visitado para que no lo sume otra vez.
+                    matAdy[j][i].existe = false;
+                }
+            }
+        }
+        
+        retorno = retorno.substring(0, retorno.length()-1);
+    
+        return retorno;
     }
 
     

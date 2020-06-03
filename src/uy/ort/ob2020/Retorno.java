@@ -10,7 +10,7 @@ public class Retorno {
 
 
 	public Retorno(Resultado resultado){
-		this.resultado = resultado;
+            this.resultado = resultado;
 	}
 	
 	public Retorno(Resultado resultado, String valorStr, int valorEnt){

@@ -29,19 +29,6 @@ public class Sistema implements ISistema{
         this.cantPuntos = cantPuntos;
     }
     
-//    public Double getCoordX() {
-//        return coordX;
-//    }
-//    public void setCoordX(Double coordX) {
-//        this.coordX = coordX;
-//    }
-//    public Double getCoordY() {
-//        return coordY;
-//    }
-//    public void setCoordY(Double coordY) {
-//        this.coordY = coordY;
-//    }
-    
     public ABBRepartidor getAbbRepartidores() {
         return ABBRepartidores;
     }
@@ -130,7 +117,6 @@ public class Sistema implements ISistema{
         }
     }
 
-    
     //LISTAR REPARTIDOR  - REVISAR
     @Override
     public Retorno listarRepartidores() {
@@ -139,12 +125,6 @@ public class Sistema implements ISistema{
         datosAfiliado = datosAfiliado.substring(0, datosAfiliado.length()-1);
         return new Retorno(Retorno.Resultado.OK, datosAfiliado, 0);
     }
-    
-    
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    // HASTA ACA                                                                                //
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    
     
     //REGISTRAR CENTRO - REVISAR
     @Override  
@@ -160,9 +140,9 @@ public class Sistema implements ISistema{
             boolean existe = this.Grafo.existeVerticeCord(coordX, coordY);
             
             if(!existe){ 
-                
                 //SI NO EXISTE AGREGA AL GRAFO                
                 this.Grafo.agregarVertice(nodoActual);
+                this.cantPuntos = cantPuntos + 1;
                 return new Retorno(Retorno.Resultado.OK);
                 
             }else{
@@ -186,11 +166,11 @@ public class Sistema implements ISistema{
             NodoGrafo nodoActual = new NodoGrafo(EsquinaActual, coordX, coordY);
             
             //busca si ya existe un punto en esas cordenadas
-             boolean existe = this.Grafo.existeVerticeCord(coordX, coordY);
-            if(!existe){ 
-                
+            boolean existe = this.Grafo.existeVerticeCord(coordX, coordY);
+            if(!existe){                 
                 //SI NO EXISTE AGREGA AL GRAFO                
                 this.Grafo.agregarVertice(nodoActual);
+                this.cantPuntos = cantPuntos + 1;
                 return new Retorno(Retorno.Resultado.OK);
                 
             }else{
@@ -203,7 +183,7 @@ public class Sistema implements ISistema{
         }
     }
     
-    //REGISTRAR TRAMO
+    //REGISTRAR TRAMO  - REVISAR
     @Override
     public Retorno registrarTramo(double coordXi, double coordYi, double coordXf, double coordYf, int metros) {
         
@@ -235,21 +215,59 @@ public class Sistema implements ISistema{
         }
     }
     
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    // HASTA ACA                                                                                //
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
     //CENTRO CRITICO MAS CERCANO
     @Override
     public Retorno centroCriticoMasCercano(double coordX, double coordY) {
         
-        // TODO Auto-generated method stub
-        return new Retorno(Retorno.Resultado.NO_IMPLEMENTADA);
+        //CREA Y CHEKEA SI EXISTE UN CENTRO O UNA ESQUINA CON ESAS CORDENADAS
+        int mayor = Integer.MAX_VALUE;
+        boolean existe = this.Grafo.existeVerticeCord(coordX, coordY);
         
+        if(existe){
+            //SI EXISTE RECORRE LOS NODOS QUE SEAN CENTROS MEDICOS Y LES HACE UN DISKJSTRA
+            NodoGrafo NodoActual = this.Grafo.existeVerticeCordenadas(coordX, coordY);
+            NodoGrafo[] verticesCriticosActuales = this.Grafo.getVerticesCriticos();
+            int i = 0;
+            
+            while( i < cantPuntos && verticesCriticosActuales[i] != null){
+                
+                CentroMedico centroActual = (CentroMedico)verticesCriticosActuales[i].getDato();
+                
+                String nombre = "";
+                int metros = this.Grafo.dijkstra(NodoActual, verticesCriticosActuales[i]);
+                
+                if(metros < mayor){
+                    mayor = metros;
+                    nombre = centroActual.getNombre();
+                }
+                
+                i++;
+                return new Retorno(Retorno.Resultado.OK, nombre, metros);
+            }
+            return new Retorno(Retorno.Resultado.ERROR_2, "No Existe", 0);
+        }else{
+            return new Retorno(Retorno.Resultado.ERROR_1, "La esquina no existe", 0);
+        }
     }
     
-    //CAMINO SEGURO
-    @Override
+    //CAMINO SEGURO - coordx1;coordy1-coordx2;coordy2|coordx1;coordy1-coordx3;coordy3|coordx2;coordy2-coordx4;coordy4
+    @Override 
     public Retorno caminoSeguro() {
         
-        // TODO Auto-generated method stub
-        return new Retorno(Retorno.Resultado.NO_IMPLEMENTADA);
+        String camino = "";
+        int totalmetros = 0;
+        
+        Grafo arbolCubrimiento = this.Grafo.prim();
+        totalmetros = arbolCubrimiento.TotalDistancias();
+        camino = arbolCubrimiento.CaminoString();
+        
+        return new Retorno(Retorno.Resultado.OK, camino, totalmetros);
         
     }
 

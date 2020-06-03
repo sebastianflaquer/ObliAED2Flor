@@ -41,7 +41,7 @@ class mimapa {
                     Tipo = "C";
                 }else if(nodoActual.getDato() instanceof Esquina){ //SI ES ESQUINA
                     Marker += "markers=color:blue";
-                    Tipo = "N";
+                    Tipo = "E";
                 }else{
                     Marker += "markers=color:green";
                     Tipo = "S";
