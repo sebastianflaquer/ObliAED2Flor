@@ -18,6 +18,10 @@ public class NodoGrafo<T> implements INodoGrafo<T>{
         this.coordY = coordY;
     }
     
+    public String getStringCord(){
+        String retorno = String.valueOf(coordX) + ";" + String.valueOf(coordY);
+        return retorno;
+    }
     
     public double getCoordX() {
         return coordX;

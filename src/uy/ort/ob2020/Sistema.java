@@ -226,33 +226,32 @@ public class Sistema implements ISistema{
     public Retorno centroCriticoMasCercano(double coordX, double coordY) {
         
         //CREA Y CHEKEA SI EXISTE UN CENTRO O UNA ESQUINA CON ESAS CORDENADAS
+        String datos = "";
+        int metros = -1;
+        String camino = "";
+        
         int mayor = Integer.MAX_VALUE;
         boolean existe = this.Grafo.existeVerticeCord(coordX, coordY);
         
         if(existe){
-            //SI EXISTE RECORRE LOS NODOS QUE SEAN CENTROS MEDICOS Y LES HACE UN DISKJSTRA
-            NodoGrafo NodoActual = this.Grafo.existeVerticeCordenadas(coordX, coordY);
-            NodoGrafo[] verticesCriticosActuales = this.Grafo.getVerticesCriticos();
-            int i = 0;
             
-            while( i < cantPuntos && verticesCriticosActuales[i] != null){
-                
-                CentroMedico centroActual = (CentroMedico)verticesCriticosActuales[i].getDato();
-                
-                String nombre = "";
-                int metros = this.Grafo.dijkstra(NodoActual, verticesCriticosActuales[i]);
-                
-                if(metros < mayor){
-                    mayor = metros;
-                    nombre = centroActual.getNombre();
-                }
-                
-                i++;
-                return new Retorno(Retorno.Resultado.OK, nombre, metros);
+            //SI EXISTE RECORRE LOS NODOS QUE SEAN CENTROS MEDICOS Y LES HACE UN DISKJSTRA            
+            NodoGrafo NodoActual = this.Grafo.existeVerticeCordenadas(coordX, coordY);
+            
+            datos = this.Grafo.dijkstraSolo(NodoActual);            
+                        
+            String[] parts = datos.split("\\|");
+            datos = parts[0].substring(0, parts[0].length()-1); // 123            
+            metros = Integer.parseInt(parts[1]); // 654321
+            
+            if(metros != -1){
+                return new Retorno(Retorno.Resultado.OK, datos, metros);
             }
-            return new Retorno(Retorno.Resultado.ERROR_2, "No Existe", 0);
+            
+            return new Retorno(Retorno.Resultado.ERROR_2);
+            
         }else{
-            return new Retorno(Retorno.Resultado.ERROR_1, "La esquina no existe", 0);
+            return new Retorno(Retorno.Resultado.ERROR_1);
         }
     }
     

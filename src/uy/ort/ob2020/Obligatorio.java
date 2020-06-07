@@ -8,7 +8,7 @@ public class Obligatorio {
         Sistema s = new Sistema();
         Prueba p = new Prueba();
         
-        s.inicializarSistema(20);
+        s.inicializarSistema(12);
        
         prueba1(s,p);
         //prueba2(s,p);
@@ -91,7 +91,7 @@ public class Obligatorio {
         
         //CENTRO MEDICO
         p.imprimirComentario("REGISTRAR CENTRO MEDICO");
-        p.ver(s.registrarCentro("Medica Uruguaya", PuntoAx, PuntoAy, EnumCriticidad.ALTA).resultado, Retorno.Resultado.OK,  "Se registro centro medico");        
+        p.ver(s.registrarCentro("Medica Uruguaya", PuntoAx, PuntoAy, EnumCriticidad.BAJA).resultado, Retorno.Resultado.OK,  "Se registro centro medico");        
         p.ver(s.registrarCentro("CASMU", PuntoBx, PuntoBy, EnumCriticidad.BAJA).resultado, Retorno.Resultado.OK,  "Se registro centro medico");
         p.ver(s.registrarCentro("Circulo Catolico", PuntoCx, PuntoCy, EnumCriticidad.ALTA).resultado, Retorno.Resultado.OK,  "Se registro centro medico");
         p.ver(s.registrarCentro("Medicina Peronalizada", PuntoDx, PuntoDy, EnumCriticidad.BAJA).resultado, Retorno.Resultado.OK,  "Se registro centro medico");

@@ -307,6 +307,63 @@ public class Grafo {
     /****************************************/
     /* DIJKSTRA                             */
     /****************************************/
+    public String dijkstraSolo(NodoGrafo origen) {
+        int posO = posVertice(origen);
+        String dato = "";
+        int metros = Integer.MAX_VALUE;;
+        //int posD = posVertice(destino);
+
+        // Etapa 1: Inicializo vectores
+        int[] dist = new int[tope];
+        int[] ant = new int[tope];
+        boolean[] vis = new boolean[tope];
+        
+        //for (int i = 0; i < tope; ant[i] = -1,dist[i] = Integer.MAX_VALUE,i++);
+        for (int i = 0; i < tope; i++){
+            ant[i] = -1;
+            dist[i] = Integer.MAX_VALUE;
+        }
+        
+        dijkstraInterno(posO, dist, ant, vis);
+        
+        for(int j = 0; j < tope; j++){
+            
+            NodoGrafo nodoActual = vertices[j];
+            if(nodoActual.getDato() instanceof CentroMedico){                         
+                CentroMedico centroActual = (CentroMedico)nodoActual.getDato();
+                if(centroActual.getCriticidad() == EnumCriticidad.ALTA){
+                    if(metros > dist[j]){
+                        
+                        dato = hacerCamino(j, ant);
+                        metros = dist[j];
+                        
+                    }
+                }
+            }
+            //this.vertices[j].getDato()
+        }
+        
+        dato = dato + "|" + String.valueOf(metros);
+
+        return dato;
+    }
+    
+    //coordx1;coordy1-coordx2;coordy2|coordx1;coordy1-coordx3;coordy3|coordx2;coordy2-coordx4;coordy4
+    public String hacerCamino(int dest, int[] ant){ 
+        
+        String dato = vertices[dest].getStringCord() + "-";
+        
+        int anterior = ant[dest];
+        
+        while(anterior != -1){
+            dato =  vertices[anterior].getStringCord() + "-" + dato;            
+            anterior = ant[anterior];
+        }
+        
+        return dato;
+    }
+    
+    
     public int dijkstra(NodoGrafo origen, NodoGrafo destino) {
         int posO = posVertice(origen);
         int posD = posVertice(destino);
